@@ -1,0 +1,118 @@
+﻿<usermanual>									
+Title: Social Participation Index
+Script Author: Zoe Niesen
+last updated:  04-14-2024
+
+Background: This script implements four questions from the extroversion section of the OCEAN personality test
+
+Questionnaire set up: The template provides 4 questions for assessing extroversion in participants, two of which are reverse scored
+
+Data Storage Info:
+The default data stored in the data files are:
+
+(1) Raw datafile: 'SocialParticipationIndex.iqdat' (a separate file for each participant) 
+
+date, time:					date and time script was run with the current group/subjectnumber 
+subject, group, session:	with the current subject/groupnumber/session id
+build:						the Inquisit build 
+
+q*_response:				response given (in assigned values)
+q*_latency:					how much time (in ms) the participant spent on the surveypage with this particular question (the last time this particular surveypage was visited)
+
+
+(2) Summary data file: 'SocialParticipationIndex_summary*.iqdat' (a separate file for each participant) 
+
+startdate:						date script was run
+starttime:						time script was started
+subjectid:						assigned subject id number
+groupid:						assigned group id number
+elapsedtime:					time it took to run script (in ms); measured from onset to offset of script
+spiscore:						total score on the social participation index
+</usermanual>
+
+
+
+		PARAMETERS
+	
+<parameters>
+/demographicpageinstructions = "Please rate the validity of these statements as they apply to you on a scale from 1-5. On the scale 1 = Not at all Accurate and 5 = Very Accurate. 
+"
+/quitinstructions = "To quit the questionnaire at any time, press Alt+E
+"
+</parameters>
+
+
+		DEFAULTS
+
+<defaults>
+/canvasaspectratio = (4,3)
+/minimumversion = "6.5.2.0"
+/ fontstyle = ("Arial", 3%, false, false, false, false, 5, 1)
+/txbgcolor = white
+/ txcolor = black
+/ quitcommand = (Alt+18)
+</defaults>
+
+
+
+		DATA
+
+<expressions>
+/ spiscore = radiobuttons.q1R.selectedvalue + radiobuttons.q2R.selectedvalue + radiobuttons.q1.selectedvalue + 
+	radiobuttons.q2.selectedvalue 
+</expressions>
+
+<summarydata>
+/columns = (script.startdate, script.starttime, 
+script.subjectid, script.groupid, script.elapsedtime, expressions.spiscore)
+</summarydata>
+
+
+		QUESTIONS
+
+<radiobuttons q1R>
+/ caption = "I am reserved"
+/ options = ("1","2","3","4","5")
+/ optionvalues = ("5", "4", "3", "2", "1")
+/ required = true
+/ orientation = vertical
+</radiobuttons>
+
+<radiobuttons q2R>
+/ caption = "I am sometimes shy, inhibited"
+/ options = ("1","2","3","4","5")
+/ optionvalues = ("5", "4", "3", "2", "1")
+/ required = true
+</radiobuttons>
+
+<radiobuttons q1>
+/ caption = "I am talkative"
+/ options = ("1","2","3","4","5")
+/ optionvalues = ("1","2","3","4","5")
+/ required = true
+/ orientation = vertical
+</radiobuttons>
+
+<radiobuttons q2>
+/ caption="I am outgoing, sociable."
+/ options=("1","2","3","4","5")
+/ optionvalues = ("1","2","3","4","5")
+/ required = true
+/ orientation = vertical
+</radiobuttons>
+
+
+		SURVEY PAGES
+
+<surveypage Extroversion1>
+/caption ="<%parameters.demographicpageinstructions%>"
+/subcaption = "<%parameters.quitinstructions%>"
+/questions = [1 = q1R, q2R]
+</surveypage>
+
+<surveypage Extroversion2>
+/caption ="<%parameters.demographicpageinstructions%>"
+/subcaption = "<%parameters.quitinstructions%>"
+/questions = [1 = q1, q2]
+</surveypage>
+
